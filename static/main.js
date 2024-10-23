@@ -123,15 +123,10 @@ ws.onmessage = (event) => {
       messageBubble.className =
         'bg-blue-800 text-white p-3 rounded-l-2xl rounded-br-2xl max-w-xs flex flex-col gap-1';
 
-      const senderLabel = document.createElement('span');
-      senderLabel.className = 'text-xs font-semibold';
-      senderLabel.textContent = 'You';
-
       const messageText = document.createElement('span');
       messageText.className = 'text-sm';
       messageText.textContent = data.message;
 
-      messageBubble.appendChild(senderLabel);
       messageBubble.appendChild(messageText);
       messageWrapper.appendChild(messageBubble);
 
