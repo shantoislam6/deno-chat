@@ -80,11 +80,11 @@ ws.onmessage = (event) => {
         'bg-white text-gray-800 p-3 rounded-r-2xl rounded-bl-2xl max-w-xs flex flex-col gap-1 text-blue-500';
 
       const usernameElement = document.createElement('span');
-      usernameElement.className = 'text-xs font-semibold';
+      usernameElement.className = 'text-xs text-blue-700 capitalize font-semibold';
       usernameElement.textContent = data.username;
 
       const messageTextElement = document.createElement('span');
-      messageTextElement.className = 'text-sm';
+      messageTextElement.className = 'text-sm whitespace-pre-wrap break-words';
       messageTextElement.textContent = data.message;
 
       messageBubble.appendChild(usernameElement);
@@ -124,7 +124,7 @@ ws.onmessage = (event) => {
         'bg-blue-800 text-white p-3 rounded-l-2xl rounded-br-2xl max-w-xs flex flex-col gap-1';
 
       const messageText = document.createElement('span');
-      messageText.className = 'text-sm';
+      messageText.className = 'text-sm whitespace-pre-wrap break-words';
       messageText.textContent = data.message;
 
       messageBubble.appendChild(messageText);
