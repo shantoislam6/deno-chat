@@ -11,13 +11,7 @@ const showMessageControlAndDisplay = () => {
   });
 };
 
-let name = '';
-do {
-  name = prompt('What is your name?');
-  if (!name.trim()) {
-    alert('Name is required');
-  }
-} while (!name.trim());
+const name = prompt('What is your name?');
 
 const ws = new WebSocket(`/ws${name ? '?name=' + name : ''}`);
 
@@ -80,7 +74,8 @@ ws.onmessage = (event) => {
         'bg-white text-gray-800 p-3 rounded-r-2xl rounded-bl-2xl max-w-xs flex flex-col gap-1 text-blue-500';
 
       const usernameElement = document.createElement('span');
-      usernameElement.className = 'text-xs text-blue-700 capitalize font-semibold';
+      usernameElement.className =
+        'text-xs text-blue-700 capitalize font-semibold';
       usernameElement.textContent = data.username;
 
       const messageTextElement = document.createElement('span');
