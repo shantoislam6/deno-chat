@@ -105,26 +105,28 @@ app.get(
             break;
           }
           case "message": {
-            if(Deno.env.get("MODE") === "development"){
+            if (Deno.env.get("MODE") === "development") {
               console.log(
                 `Message from ${clientId} | ${username}: ${message.data.message}`,
               );
             }
-           
-            sendClientMessage({
-              data: {
+
+            if (message.data.message.trim() !== "") {
+              sendClientMessage({
+                data: {
+                  username,
+                  message: message.data.message,
+                  sent_at: dayjs().format("YYYY MMM DD HH:mm A"),
+                },
+                type: "sendMessagge",
+              }, clientId);
+
+              sendBroadCastMessage({
                 username,
                 message: message.data.message,
                 sent_at: dayjs().format("YYYY MMM DD HH:mm A"),
-              },
-              type: "sendMessagge",
-            }, clientId);
-
-            sendBroadCastMessage({
-              username,
-              message: message.data.message,
-              sent_at: dayjs().format("YYYY MMM DD HH:mm A"),
-            }, clientId);
+              }, clientId);
+            }
 
             break;
           }

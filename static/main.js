@@ -12,9 +12,7 @@ const showMessageControlAndDisplay = () => {
 };
 
 const name = prompt('What is your name?');
-const ws = new WebSocket(
-  `/ws${name ? '?name=' + name : ''}`
-);
+const ws = new WebSocket(`/ws${name ? '?name=' + name : ''}`);
 
 const chatRooms = new Map();
 
@@ -103,7 +101,7 @@ ws.onmessage = (event) => {
         clientId: data.clientId,
         username: data.username,
         join_at: data.sent_at,
-      })
+      });
 
       chatRoomContainer.innerHTML = '';
       chatRooms.forEach((user) => {
@@ -164,14 +162,15 @@ messageForm.addEventListener('submit', (e) => {
   const form = e.currentTarget;
   const message = form.message;
 
-  ws.send(
-    JSON.stringify({
-      type: 'message',
-      data: {
-        message: message.value,
-      },
-    })
-  );
-
-  message.value = '';
+  if (message.value.trim() !== '') {
+    ws.send(
+      JSON.stringify({
+        type: 'message',
+        data: {
+          message: message.value,
+        },
+      })
+    );
+    message.value = '';
+  }
 });
