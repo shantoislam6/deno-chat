@@ -1,0 +1,19 @@
+{
+  "imports": {
+    "@std/assert": "jsr:@std/assert",
+    "@hono/zod-validator": "npm:@hono/zod-validator",
+    "dayjs": "https://cdn.skypack.dev/dayjs",
+    "hono": "jsr:@hono/hono@^4.6.6",
+    "zod": "npm:zod"
+  },
+  "tasks": {
+    "start": "deno run --allow-net --allow-read main.ts",
+    "dev": "deno run --allow-env --allow-net --allow-read --allow-import --watch main.tsx",
+    "test:dev": "deno test --allow-net --allow-read --allow-env --watch"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "hono/jsx"
+  }
+ 
+}
