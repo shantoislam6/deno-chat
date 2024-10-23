@@ -105,9 +105,12 @@ app.get(
             break;
           }
           case "message": {
-            console.log(
-              `Message from ${clientId} | ${username}: ${message.data.message}`,
-            );
+            if(Deno.env.get("MODE") === "development"){
+              console.log(
+                `Message from ${clientId} | ${username}: ${message.data.message}`,
+              );
+            }
+           
             sendClientMessage({
               data: {
                 username,
