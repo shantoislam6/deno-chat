@@ -22,7 +22,7 @@ function reloadChatRoom() {
   chatRooms.forEach((user) => {
     if (user.mySelf) {
       chatRoomContainer.innerHTML += `<div class="flex flex-col">
-      <h3 class="font-semibold"><span class="text-blue-500">${name} </span>(You)</h3>
+      <h3 class="font-semibold"><span class="text-blue-500">${name ?? 'Anonymouse'} </span>(You)</h3>
        <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
     </div>`;
     } else {
