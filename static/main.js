@@ -13,7 +13,7 @@ const showMessageControlAndDisplay = () => {
 
 const name = prompt('What is your name?');
 const ws = new WebSocket(
-  `ws://localhost:8000/ws${name ? '?name=' + name : ''}`
+  `/ws${name ? '?name=' + name : ''}`
 );
 
 const chatRooms = new Map();
