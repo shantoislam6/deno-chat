@@ -7,7 +7,7 @@
     "zod": "npm:zod"
   },
   "tasks": {
-    "start": "deno run --allow-net --allow-read main.ts",
+    "start": "deno run --allow-env --allow-net --allow-read --allow-import main.tsx",
     "dev": "deno run --allow-env --allow-net --allow-read --allow-import --watch main.tsx",
     "test:dev": "deno test --allow-net --allow-read --allow-env --watch"
   },
