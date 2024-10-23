@@ -11,10 +11,34 @@ const showMessageControlAndDisplay = () => {
   });
 };
 
-const name = prompt('What is your name?');
+let name = '';
+do {
+  name = prompt('What is your name?');
+  if (!name.trim()) {
+    alert('Name is required');
+  }
+} while (!name.trim());
+
 const ws = new WebSocket(`/ws${name ? '?name=' + name : ''}`);
 
 const chatRooms = new Map();
+
+function reloadChatRoom() {
+  chatRoomContainer.innerHTML = '';
+  chatRooms.forEach((user) => {
+    if (user.mySelf) {
+      chatRoomContainer.innerHTML += `<div class="flex flex-col">
+      <h3 class="font-semibold"><span class="text-blue-500">${name} </span>(You)</h3>
+       <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
+    </div>`;
+    } else {
+      chatRoomContainer.innerHTML += `<div class="flex flex-col">
+        <h3 class="font-semibold">${user.username}</h3>
+        <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
+      </div>`;
+    }
+  });
+}
 
 ws.onmessage = (event) => {
   const message = JSON.parse(event.data);
@@ -24,15 +48,10 @@ ws.onmessage = (event) => {
       chatRooms.set(data.clientId, {
         clientId: data.clientId,
         join_at: data.join_at,
-        username: 'You',
+        username: data.username,
+        mySelf: true,
       });
-      chatRoomContainer.innerHTML = '';
-      chatRooms.forEach((user) => {
-        chatRoomContainer.innerHTML += `<div class="flex flex-col">
-          <h3 class="font-semibold">${user.username}</h3>
-           <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
-        </div>`;
-      });
+      reloadChatRoom();
       ws.send(JSON.stringify({ type: 'join' }));
       break;
     }
@@ -42,25 +61,12 @@ ws.onmessage = (event) => {
         username: data.username,
         join_at: data.join_at,
       });
-      chatRoomContainer.innerHTML = '';
-      chatRooms.forEach((user) => {
-        chatRoomContainer.innerHTML += `<div class="flex flex-col">
-          <h3 class="font-semibold">${user.username}</h3>
-          <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
-        </div>`;
-      });
-
+      reloadChatRoom();
       break;
     }
     case 'leave': {
       chatRooms.delete(data.clientId);
-      chatRoomContainer.innerHTML = '';
-      chatRooms.forEach((user) => {
-        chatRoomContainer.innerHTML += `<div class="flex flex-col">
-          <h3 class="font-semibold">${user.username}</h3>
-          <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
-        </div>`;
-      });
+      reloadChatRoom();
       break;
     }
     case 'broadCastMessage': {
@@ -103,13 +109,7 @@ ws.onmessage = (event) => {
         join_at: data.sent_at,
       });
 
-      chatRoomContainer.innerHTML = '';
-      chatRooms.forEach((user) => {
-        chatRoomContainer.innerHTML += `<div class="flex flex-col">
-          <h3 class="font-semibold">${user.username}</h3>
-          <span class="text-xs text-zinc-500 ">join at ${user.join_at}</span>
-        </div>`;
-      });
+      reloadChatRoom();
 
       break;
     }
