@@ -1,15 +1,23 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { serveStatic, upgradeWebSocket } from "hono/deno";
+import { requestId } from 'hono/request-id';
 
 import "jsr:@std/dotenv/load";
 
 import ChatBox from "./ChatBox.tsx";
+
 import type { WSContext } from "hono/ws";
 
 import dayjs from "dayjs";
 
-const app = new Hono();
+type Env = {
+  Variables: {
+    requestId: string
+  }
+}
+
+const app = new Hono<Env>();
 
 if (Deno.env.get("MODE") === "development") {
   app.use(logger());
@@ -21,6 +29,9 @@ app.use(
     root: "./",
   }),
 );
+
+app.use('*', requestId());
+
 
 let id = 0;
 
@@ -71,7 +82,7 @@ const sendJoinMessageToOtherClients = (user: {
 };
 
 const sendLeaveMessageToOtherClients = (clientId: string) => {
-  console.log(clientId);
+  
   for (const [key, client] of connectedClients) {
     if (key !== clientId) {
       client.ws.send(JSON.stringify({
@@ -88,8 +99,8 @@ app.get(
   "/ws",
   upgradeWebSocket((c) => {
     const url = new URL(c.req.url);
-
-    const clientId = `C${id}_${crypto.randomUUID()}`;
+ 
+    const clientId = `C${id}_${c.get('requestId')}`;
 
     id++;
     const username = url.searchParams.get("name") || "Anonymous";
